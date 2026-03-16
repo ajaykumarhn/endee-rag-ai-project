@@ -1,0 +1,21 @@
+Artificial Intelligence (AI) is a field of computer science focused on building machines that can perform
+tasks that typically require human intelligence. These tasks include learning from data, recognizing
+patterns, understanding natural language, and making decisions.
+
+
+Machine Learning is a subset of AI that enables systems to automatically learn and improve from
+experience without being explicitly programmed. Machine learning models analyze data and identify
+patterns that allow them to make predictions or decisions.
+
+
+Deep Learning is a specialized area within machine learning that uses neural networks with multiple
+layers. These models are especially powerful for tasks such as image recognition, speech processing,
+and natural language understanding.
+
+
+Natural Language Processing (NLP) allows computers to understand, interpret, and generate human
+language. It powers technologies such as chatbots, translation systems, and voice assistants.
+
+
+Applications of AI include recommendation systems, autonomous vehicles, fraud detection, healthcare
+diagnostics, and intelligent virtual assistants.
