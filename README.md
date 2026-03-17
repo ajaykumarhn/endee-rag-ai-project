@@ -1,149 +1,151 @@
-# 🤖 AI Document Assistant (RAG using Endee)
+# 🤖 AI Workspace (RAG & Recommendations)
 
-An AI-powered document assistant that allows users to upload PDFs and ask questions about the document.  
-The system uses Retrieval-Augmented Generation (RAG) with the Endee vector database to retrieve relevant content and generate answers.
+An AI-powered document assistant and dynamic e-commerce recommendation engine.
+This project demonstrates advanced **Retrieval-Augmented Generation (RAG)**, **Semantic Search**, and **Agentic Routing Workflows** paired with a beautiful glassmorphism User Interface.
+
+*Note: This project initially targeted the Endee vector database, but was adapted to use ChromaDB to support native execution on Windows without Docker environments while maintaining identical semantic search capabilities.*
 
 ---
 
 ## 🚀 Features
 
-- 📄 Upload PDF documents
-- 🔍 Semantic search using embeddings
-- 🧠 Retrieval-Augmented Generation (RAG)
-- ⚡ Fast API backend
-- 💬 Interactive chat interface
-- 🗄 Vector storage using Endee
+- 📄 **Upload PDF Documents**: Ingest documents on the fly into the vector knowledge base.
+- 🔍 **Semantic Search**: Powered by `sentence-transformers`.
+- 🧠 **Agentic AI Workflow**: A smart Gemini-powered agent that dynamically routes user intents to either RAG retrieval, Recommendation generation, or general conversation.
+- 🛒 **Recommendation Engine**: Provides contextual item recommendations based on vector similarity.
+- ⚡ **FastAPI Backend**: High performance API serving both the LLM logic and the static asset UI.
+- 💬 **Interactive Premium UI**: A beautiful Vanilla HTML/CSS/JS frontend featuring dark-mode, glassmorphism, and markdown support.
 
 ---
 
 ## 🛠 Tech Stack
 
-- Python
-- FastAPI
-- Streamlit
-- Sentence Transformers
-- Endee Vector Database
+- **Python** (Backend Core)
+- **FastAPI** & **Uvicorn** (Web framework and application server)
+- **Google GenAI** (Gemini 2.5 Flash for LLM reasoning and routing)
+- **ChromaDB** (Persistent native vector database)
+- **Sentence Transformers** (`all-MiniLM-L6-v2` for embeddings)
+- **PyPDF2** (Document parsing)
+- **HTML5, CSS3, JS** (Frontend Interface)
 
 ---
 
 ## 🏗 System Architecture
 
-```
-User Question
-     ↓
-Streamlit Chat UI
-     ↓
-FastAPI Backend
-     ↓
-Embedding Model
-     ↓
-Endee Vector Database
-     ↓
-Retrieve Relevant Documents
-     ↓
-Generate AI Answer
+```text
+User Input (Chat / File Upload)
+       │
+      UI Frontend (Vanilla JS + CSS)
+       │
+   FastAPI Backend
+       ├──> PDF -> PyPDF2 -> SentenceTransformer -> ChromaDB (Knowledge Base)
+       │
+   Agentic Router (Gemini)
+       ├───> Intent: RAG       -> Query ChromaDB (Knowledge DB) -> Gemini -> User
+       ├───> Intent: RECOMMEND -> Query ChromaDB (Products DB)  -> Gemini -> User
+       └───> Intent: CHAT      -> Gemini -> User
 ```
 
 ---
 
-## 📸 Project Screenshots
+## 📸 Project Screenshots & Demo
 
-### Chat Interface
+### AI Workspace Complete UI
+![UI Application](images/ai-workspace-ui.png)
 
-![Chat UI](images/chat-ui.png)
+### RAG & Recommendations In-Action
+![Demo Recording](images/demo-final.webp)
 
-### API Documentation
-
-![API Docs](images/api-docs.png)
+### RAG Document Upload feature
+![RAG File Upload](images/rag-success.png)
 
 ---
 
 ## 📂 Project Structure
 
-```
+```text
 endee-rag-ai-project
 │
-├── app.py              # FastAPI backend
-├── chat_ui.py          # Streamlit chat interface
-├── embeddings.py       # Document embedding generation
-├── search.py           # Semantic search logic
-├── rag_pipeline.py     # RAG pipeline
-├── endee_db.py         # Endee vector DB connection
+├── api/
+│   ├── main.py         # FastAPI application and endpoint routing
+│   ├── agent.py        # Gemini Agentic routing and response generation
+│   └── db_client.py    # ChromaDB integration and embedding logic
 │
-├── data
-│   └── documents.txt   # Knowledge base
+├── ui/
+│   ├── index.html      # Main application interface
+│   ├── style.css       # Premium Glassmorphism styling
+│   └── app.js          # Client-side API interactions and chat logic
 │
-├── images              # Screenshots for README
-│
-├── requirements.txt
-└── README.md
+├── chroma_data/        # Persistent vector database storage
+├── requirements.txt    # Python dependencies
+└── README.md           # Project documentation
 ```
 
 ---
 
 ## ⚙ Installation
 
-Clone the repository:
-
+### 1. Clone the repository
+```bash
+git clone https://github.com/ajaykumarhn/endee.git
+cd endee/endee-rag-ai-project
 ```
-git clone https://github.com/YOUR_USERNAME/endee-rag-ai-project.git
-cd endee-rag-ai-project
+
+### 2. Install dependencies
+Ensure you have Python 3.9+ installed.
+```bash
+pip install fastapi uvicorn sentence-transformers chromadb google-genai pypdf python-multipart
 ```
 
-Install dependencies:
+### 3. Configure API Keys
+You need a Google Gemini API key to run the generative AI routing. Get one from [Google AI Studio](https://aistudio.google.com/).
 
+Set the environment variable in your terminal:
+
+**Windows (PowerShell):**
+```powershell
+$env:GEMINI_API_KEY="your_api_key_here"
 ```
-pip install -r requirements.txt
+
+**Linux/macOS:**
+```bash
+export GEMINI_API_KEY="your_api_key_here"
 ```
 
 ---
 
 ## ▶ Running the Project
 
-Generate embeddings:
+Start the unified API server and UI:
 
-```
-python embeddings.py
-```
-
-Start API server:
-
-```
-python -m uvicorn app:app --reload
+```bash
+python -m uvicorn api.main:app --host 0.0.0.0 --port 8000
 ```
 
-Start chat interface:
-
-```
-python -m streamlit run chat_ui.py
-```
-
-Open browser:
-
-```
-http://localhost:8501
-```
+Open your browser and navigate to:
+**http://localhost:8000**
 
 ---
 
-## 💡 Example Questions
+## 💡 Usage Guide
 
-You can ask questions like:
+Once the application is running in your browser:
 
-- What is machine learning?
-- What is artificial intelligence?
-- What does the document explain?
-- What are applications of AI?
+1. **Test the Recommendation Engine**:
+   - Click the **"Seed Catalog"** button in the sidebar to populate the database with sample products.
+   - Ask the AI: *"I need a new monitor for coding."* The agent will query the database and generate a curated response.
+   
+2. **Test RAG (Document Q&A)**:
+   - Use the **"Upload a PDF to context"** section to upload a PDF file. (You can download and use the provided [sample_doc.pdf](sample_doc.pdf) for testing).
+   - Wait for the "Success" confirmation.
+   - Ask the AI a question about the contents of the document you uploaded, for example: *"What is the secret access code to the server room?"*
 
----
-
-## 📌 Use Case
-
-This project demonstrates how vector databases like **Endee** can be used to build AI-powered search and question answering systems using the RAG architecture.
+3. **General Chat**:
+   - Ask the AI any general question like *"What is retrieval augmented generation?"* or *"Hello there!"*
 
 ---
 
 ## 👨‍💻 Author
 
 Ajay Kumar  
-GitHub: https://github.com/ajaykumarhn
+GitHub: [https://github.com/ajaykumarhn](https://github.com/ajaykumarhn)
